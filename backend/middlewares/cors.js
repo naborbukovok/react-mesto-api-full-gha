@@ -1,5 +1,6 @@
 const allowedCors = [
   // 'http://localhost:3000',
+  'http://mesto.naborbukovok.nomoredomainsrocks.ru',
 ];
 
 // eslint-disable-next-line consistent-return
