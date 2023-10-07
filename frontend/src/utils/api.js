@@ -7,7 +7,7 @@ class Api {
   // Загрузка информации о пользователе с сервера (GET).
   getUserInfo() {
     return fetch(`${this.baseUrl}/users/me`, {
-      headers: this.headers,
+      credentials: 'include'
     }).then((res) => {
       return this._getResponseData(res);
     });
@@ -16,7 +16,7 @@ class Api {
   // Загрузка карточек с сервера (GET).
   getInitialCards() {
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers,
+      credentials: 'include'
     }).then((res) => {
       return this._getResponseData(res);
     });
@@ -27,6 +27,7 @@ class Api {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify({ avatar }),
     }).then((res) => {
       return this._getResponseData(res);
@@ -38,6 +39,7 @@ class Api {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify({ name, about }),
     }).then((res) => {
       return this._getResponseData(res);
@@ -49,6 +51,7 @@ class Api {
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify({ name, link }),
     }).then((res) => {
       return this._getResponseData(res);
@@ -59,7 +62,7 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this.baseUrl}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this.headers,
+      credentials: 'include',
     }).then((res) => {
       return this._getResponseData(res);
     });
@@ -69,7 +72,7 @@ class Api {
   addLike(cardId) {
     return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
-      headers: this.headers,
+      credentials: 'include',
     }).then((res) => {
       return this._getResponseData(res);
     });
@@ -79,7 +82,7 @@ class Api {
   removeLike(cardId) {
     return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
-      headers: this.headers,
+      credentials: 'include',
     }).then((res) => {
       return this._getResponseData(res);
     });
@@ -95,6 +98,9 @@ class Api {
 
 const api = new Api({
   baseUrl: "http://api.mesto.naborbukovok.nomoredomainsrocks.ru",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 export default api;

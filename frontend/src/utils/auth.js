@@ -24,6 +24,7 @@ export const login = (email, password) => {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
+    credentials: 'include',
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
@@ -32,22 +33,16 @@ export const login = (email, password) => {
       }
       return res.json();
     })
-    .then((data) => {
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        return data;
-      }
-    })
 };
 
-export const checkToken = (token) => {
+export const checkAuth = () => {
     return fetch(`${BASE_URL}/users/me`, {
       method: 'GET',
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
-      }
+      },
+      credentials: 'include'
     })
     .then(res => {
       if (!res.ok) {

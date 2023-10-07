@@ -7,7 +7,7 @@ import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import api from "../utils/api.js";
-import { register, login, checkToken } from "../utils/auth.js";
+import { register, login, checkAuth } from "../utils/auth.js";
 import avatarTemplate from "../images/avatar-template.png";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -40,7 +40,7 @@ function App() {
       api
         .getUserInfo()
         .then((data) => {
-          setCurrentUser(data);
+          setCurrentUser(data.data);
         })
         .catch((error) => {
           console.log(error);
@@ -49,7 +49,7 @@ function App() {
       api
         .getInitialCards()
         .then((data) => {
-          setCards(data);
+          setCards(data.data.reverse());
         })
         .catch((error) => {
           console.log(error);
@@ -58,24 +58,18 @@ function App() {
   }, [loggedIn]);
 
   React.useEffect(() => {
-    if (localStorage.getItem('token')){
-      const token = localStorage.getItem('token');
-  
-      if (token) {
-        checkToken(token)
-        .then((res) => {
-          if (res) {
-            setEmail(res.data.email);
-            setLoggedIn(true);
-            navigate("/", {replace: true});
-            }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      }
-    }
-  }, [])
+    checkAuth()
+      .then((res) => {
+        if (res) {
+          setEmail(res.data.email);
+          setLoggedIn(true);
+          navigate("/", {replace: true});
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }, [])
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -101,14 +95,14 @@ function App() {
   }
 
   function handleLikeClick(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     if (!isLiked) {
       api
         .addLike(card._id)
         .then((newCard) => {
           setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
+            state.map((c) => (c._id === card._id ? newCard.data : c))
           );
         })
         .catch((error) => {
@@ -119,7 +113,7 @@ function App() {
         .removeLike(card._id)
         .then((newCard) => {
           setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
+            state.map((c) => (c._id === card._id ?  newCard.data : c))
           );
         })
         .catch((error) => {
@@ -144,7 +138,7 @@ function App() {
     api
       .setAvatar(input.avatar)
       .then((data) => {
-        setCurrentUser(data);
+        setCurrentUser(data.data);
         closeAllPopups();
       })
       .catch((error) => {
@@ -156,7 +150,7 @@ function App() {
     api
       .setUserInfo(input.name, input.about)
       .then((data) => {
-        setCurrentUser(data);
+        setCurrentUser(data.data);
         closeAllPopups();
       })
       .catch((error) => {
@@ -168,7 +162,7 @@ function App() {
     api
       .postCard(input.name, input.link)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         closeAllPopups();
       })
       .catch((error) => {
