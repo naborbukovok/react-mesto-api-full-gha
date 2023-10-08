@@ -2,7 +2,7 @@
 
 > :red_circle: **Об ошибке в тестах**
 > 
-> В истории коммитов можно найти [**коммит**](https://github.com/naborbukovok/react-mesto-api-full-gha/commit/8cccda10b958816c12088d9dce272aeb57095124), для которого проходят все тесты. [**Разница**](https://github.com/naborbukovok/react-mesto-api-full-gha/compare/84459a8..8cccda1/) с текущим коммитом только в настройках ```sameSite``` и ```secure``` метода ```res.cookie()```. Настройку ```sameSite``` со значением ```'None'``` необходимо задать для межсайтового использования. Настройку ```sameSite``` нельзя использовать без настройки ```secure```.
+> В истории коммитов можно найти [**коммит**](https://github.com/naborbukovok/react-mesto-api-full-gha/commit/8cccda10b958816c12088d9dce272aeb57095124), для которого проходят все тесты. [**Разница**](https://github.com/naborbukovok/react-mesto-api-full-gha/compare/8cccda1..84459a8) с текущим коммитом только в настройках ```sameSite``` и ```secure``` метода ```res.cookie()```. Настройку ```sameSite``` со значением ```'None'``` необходимо задать для межсайтового использования. Настройку ```sameSite``` нельзя использовать без настройки ```secure```.
 
 ## Mesto: фото-лента [frontend + backend]
 
