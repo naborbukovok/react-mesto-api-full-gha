@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { SECRET_KEY, CREATED } = require('../utils/constants');
 const User = require('../models/user');
+const BadRequestError = require('../errors/bad-request-error');
 const ConflictError = require('../errors/conflict-error');
 const NotFoundError = require('../errors/not-found-error');
 
@@ -56,7 +57,13 @@ module.exports.updateUserInfo = (req, res, next) => {
 
       res.send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('В метод обновления информации о пользователе переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // Обновление аватара пользователя.
@@ -72,7 +79,13 @@ module.exports.updateUserAvatar = (req, res, next) => {
 
       res.send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('В метод обновления аватара пользователя переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // Вход.
@@ -112,7 +125,9 @@ module.exports.createUser = (req, res, next) => {
       },
     }))
     .catch((err) => {
-      if (err.code === 11000) {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('В метод создания пользователя переданы некорректные данные.'));
+      } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с такой почтой уже существует.'));
       } else {
         next(err);
