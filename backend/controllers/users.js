@@ -82,7 +82,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, SECRET_KEY);
-      res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true });
+      res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: 'none' });
       res.send({ token });
     })
     .catch(next);
